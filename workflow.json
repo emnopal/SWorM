@@ -1,0 +1,21 @@
+{
+    "name":"test-workflow",
+    "description":"workflow tester",
+    "baseurl":"https://example.com",
+    "envs":{
+
+    },
+    "actions":[
+        {
+            "name":"grab user",
+            "description":"grabing some user",
+            "path":"/user/{username}",
+            "method":"GET",
+            "header":{},
+            "parameters":{
+                "username":"test"
+            },
+            "payload":""
+        }
+    ]
+}
