@@ -5,71 +5,71 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/SWorM/v2/agent"
+	"github.com/SWorM/v2/debug"
 	"github.com/SWorM/v2/tool"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-const (
-	// ### VERBOSITY level (in binary/decimal)
-	// # - 0001/1: print out workflow
-	// # - 0010/2: print out action
-	// # etc ...
-	// # to print multiple things just add the decimal
-
-	VERBOSITY = 3
-	DEBUG     = true
-)
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func RunAction(action tool.Action, doc *openapi3.T) {
-	docExt := (&tool.T{T: doc}).Extend()
-
-	openapi_refrence := docExt.OperationID.Value(action.Name)
-	if openapi_refrence != nil {
-		// WIP
-	}
-	// WIP
-
-	fmt.Printf("running: '%s'  \n", action.Name)
+func executeAction(workflow tool.Workflow, action tool.Action, doc *openapi3.T) (bool, *agent.Response, error) {
+	agent := agent.New(workflow, action, &tool.T{T: doc})
+	should_continue, response, err := agent.RunAction()
+	return should_continue, response, err
 }
 
 func main() {
+	debug.LoadDebugConfig()
+
 	openapi_raw, err := os.ReadFile("./openapi.yaml")
-	check(err)
+	debug.Check(err)
 
 	workflow_raw, err := os.ReadFile("./workflow.json")
-	check(err)
+	debug.Check(err)
 
 	var workflow tool.Workflow
 	err = json.Unmarshal(workflow_raw, &workflow)
-	check(err)
+	debug.Check(err)
 
 	loader := openapi3.NewLoader()
 	doc, err := loader.LoadFromData(openapi_raw)
-	check(err)
+	debug.Check(err)
 
-	// for debugging workflow
-	if DEBUG {
-		tool.DumpWorkflow(workflow, VERBOSITY)
+	if debug.DEBUG {
+		tool.DumpWorkflow(workflow)
 	}
 
 	action_list := workflow.Actions
 	for _, action := range action_list {
 		action.Endpoint = workflow.Baseurl + action.Path
 
-		// for debugging action
-		if DEBUG {
-			tool.DumpAction(action, VERBOSITY)
+		if debug.DEBUG {
+			tool.DumpAction(action)
 		}
 
+		println("endpoint", action.Endpoint)
+
 		fmt.Printf("starting: '%s'  \n", action.Name)
-		RunAction(action, doc)
-		fmt.Printf("returning: '%s'  \n", action.Name)
+
+		//## run action from the workflow
+		should_continue, response, err := executeAction(workflow, action, doc)
+		if !debug.SKIPCHECKS && !should_continue {
+			debug.Check(err)
+		} else if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		//## show result of action
+
+		if response != nil {
+			fmt.Printf("returning: '%s'  \n", response.Status())
+			// fmt.Printf("returning: '%s'  \n", response.Body())
+		} else {
+			fmt.Printf("returning: '%v'  \n", nil)
+		}
 	}
+
+	//## TODO: save history as {date}.log
+
+	//## exit
 }
