@@ -3,19 +3,43 @@
     "description":"workflow tester",
     "baseurl":"https://example.com",
     "envs":{
-
+        "cool":"testingcool"
     },
     "actions":[
         {
             "name":"grab user",
-            "description":"grabing some user",
+            "description":"grabing some user - via Path & Method",
             "path":"/user/{username}",
             "method":"GET",
             "header":{},
             "parameters":{
-                "username":"test"
+                "username":"test",
+                "username2":"test",
+                "test2Yes":"test"
             },
             "payload":""
+        },
+        {
+            "name":"grab user",
+            "description":"grabing some user - via opID",
+            "path":"/user/{username}",
+            "method":"PUT",
+            "header":{},
+            "parameters":{
+                "username":"{cool}"
+            },
+            "payload":"cool-test"
+        },
+        {
+            "name":"grab user",
+            "description":"grabing some user - via opID",
+            "path":"/user/{username}",
+            "method":"GET",
+            "header":{},
+            "parameters":{
+                "username":"{cool22}"
+            },
+            "payload":"test"
         }
     ]
 }
