@@ -4,15 +4,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
-type ExtendedT struct {
-	*T
-	OperationID *OperationID
-}
-
-type T struct {
-	*openapi3.T
-}
-
 type OperationID struct {
 	m map[string]*ExtendedOperation
 }
@@ -38,8 +29,8 @@ type Operation struct {
 	*openapi3.Operation
 }
 
-func (Operation *Operation) Extend(Path string, Method string) ExtendedOperation {
-	return ExtendedOperation{
+func (Operation *Operation) Extend(Path string, Method string) *ExtendedOperation {
+	return &ExtendedOperation{
 		Path:         Path,
 		Method:       Method,
 		Extensions:   Operation.Extensions,
@@ -55,34 +46,6 @@ func (Operation *Operation) Extend(Path string, Method string) ExtendedOperation
 		Servers:      Operation.Servers,
 		ExternalDocs: Operation.ExternalDocs,
 	}
-}
-
-func (T *T) Extend() *ExtendedT {
-	paths := T.Paths.Map()
-	op := make(map[string]*ExtendedOperation)
-
-	for path, pathitem := range paths {
-
-		operations := pathitem.Operations()
-
-		for method, operation := range operations {
-
-			operation := &Operation{operation}
-			NewOperation := operation.Extend(path, method)
-			op[operation.OperationID] = &NewOperation
-
-		}
-	}
-	OperationID := &OperationID{
-		op,
-	}
-
-	extendedT := &ExtendedT{
-		T:           T,
-		OperationID: OperationID,
-	}
-
-	return extendedT
 }
 
 func (operationID *OperationID) Value(key string) *ExtendedOperation {

@@ -2,19 +2,12 @@ package tool
 
 import (
 	"fmt"
+
+	"github.com/SWorM/v2/debug"
 )
 
-const (
-	WORKFLOW_CODE int = 1
-	ACTION_CODE   int = 2
-)
-
-func CheckVerbosity(verbosity int, code int) bool {
-	return (verbosity&code == code)
-}
-
-func DumpWorkflow(workflow Workflow, verbosity int) {
-	if !CheckVerbosity(verbosity, WORKFLOW_CODE) {
+func DumpWorkflow(workflow Workflow) {
+	if !debug.CheckVerbosity(debug.WORKFLOW_CODE) {
 		return
 	}
 
@@ -34,8 +27,8 @@ func DumpWorkflow(workflow Workflow, verbosity int) {
 	fmt.Println("#=========================================##=========================================#")
 }
 
-func DumpAction(action Action, verbosity int) {
-	if !CheckVerbosity(verbosity, ACTION_CODE) {
+func DumpAction(action Action) {
+	if !debug.CheckVerbosity(debug.ACTION_CODE) {
 		return
 	}
 
