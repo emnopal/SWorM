@@ -21,7 +21,7 @@
         },
         {
             "name":"grab user",
-            "description":"grabing some user - via opID",
+            "description":"grabing some user - via Path & Method",
             "path":"/user/{username}",
             "method":"PUT",
             "header":{},
@@ -32,7 +32,7 @@
         },
         {
             "name":"grab user",
-            "description":"grabing some user - via opID",
+            "description":"grabing some user - via Path & Method",
             "path":"/user/{username}",
             "method":"GET",
             "header":{},
