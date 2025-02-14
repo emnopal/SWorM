@@ -33,7 +33,7 @@ func (a *ActionRequest) Load(jsonString string) (*ActionItem, error) {
 	err := json.Unmarshal(action_bytes, a)
 
 	if a.Host == "" {
-		return nil, fmt.Errorf("site is required")
+		return nil, fmt.Errorf("Host is required")
 	}
 
 	if a.Host[len(a.Host)-1:] == "/" {
