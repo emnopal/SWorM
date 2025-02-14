@@ -13,5 +13,5 @@ func (fl *FileLoader) Load() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to load file: %w", err)
 	}
-	return content, nil
+	return string(content), nil
 }
