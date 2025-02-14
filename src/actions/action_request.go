@@ -31,6 +31,11 @@ func (a *ActionRequest) Dump() (string, error) {
 func (a *ActionRequest) Load(jsonString string) (*ActionItem, error) {
 	action_bytes := []byte(jsonString)
 	err := json.Unmarshal(action_bytes, a)
+
+	if a.Site[len(a.Site)-1:] == "/" {
+		a.Site = a.Site[:len(a.Site)-1]
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("error reading action file: %w", err)
 	}
