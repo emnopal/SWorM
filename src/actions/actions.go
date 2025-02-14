@@ -41,26 +41,3 @@ func (a *ActionsDict) LoadActions(actionString []string) error {
 func NewActionsDict() *ActionsDict {
 	return &ActionsDict{Actions: make(map[string]*ActionItem)}
 }
-
-// func (am *ActionMap) GetAction(action string) (ActionItem, error) {
-// 	if _, ok := am.Actions[action]; !ok {
-// 		return ActionItem{}, errors.New("action not found")
-// 	}
-// 	return am.Actions[action], nil
-// }
-
-// func (am *ActionMap) AddAction(action ActionItem) error {
-// 	if _, ok := am.Actions[action.Name]; ok {
-// 		return errors.New("action already exists")
-// 	}
-// 	am.Actions[action.Name] = action
-// 	return nil
-// }
-
-// func (am *ActionMap) Dump() (string, error) {
-// 	json_dump, err := json.MarshalIndent(am.Actions, "", "  ")
-// 	if err != nil {
-// 		return "", fmt.Errorf("error dumping action map: %w", err)
-// 	}
-// 	return string(json_dump), nil
-// }

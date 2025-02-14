@@ -1,6 +1,8 @@
 package loader
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type FileLoader struct {
 	FilePath string
