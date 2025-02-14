@@ -28,6 +28,10 @@ func (a *ActionsDict) GetAction(actionName string) (*ActionItem, error) {
 }
 
 func (a *ActionsDict) LoadActions(actionString []string) error {
+	if len(actionString) == 0 {
+		return errors.New("no actions found")
+	}
+
 	for _, action := range actionString {
 		actionItem, err := Load("request", action)
 		if err != nil {

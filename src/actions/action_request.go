@@ -8,7 +8,7 @@ import (
 type ActionRequest struct {
 	Name        string            `json:"name"`
 	Description string            `json:"description"`
-	Site        string            `json:"site"`
+	Host        string            `json:"host"`
 	Path        string            `json:"path"`
 	Method      string            `json:"method"`
 	Header      map[string]string `json:"header"`
@@ -32,8 +32,12 @@ func (a *ActionRequest) Load(jsonString string) (*ActionItem, error) {
 	action_bytes := []byte(jsonString)
 	err := json.Unmarshal(action_bytes, a)
 
-	if a.Site[len(a.Site)-1:] == "/" {
-		a.Site = a.Site[:len(a.Site)-1]
+	if a.Host == "" {
+		return nil, fmt.Errorf("site is required")
+	}
+
+	if a.Host[len(a.Host)-1:] == "/" {
+		a.Host = a.Host[:len(a.Host)-1]
 	}
 
 	if err != nil {
